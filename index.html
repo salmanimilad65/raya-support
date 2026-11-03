@@ -1,1 +1,89 @@
 
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رایا ساپورت</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+<h1>رایا ساپورت</h1>
+<p>سامانه پشتیبانی رایا صنعت استیل و رایا گلس</p>
+</header>
+
+<main class="container">
+
+<section class="card">
+<h2>ثبت درخواست پشتیبانی</h2>
+
+<form id="supportForm">
+<label>نام و نام خانوادگی</label>
+<input id="name" required>
+
+<label>شماره تماس</label>
+<input id="phone" type="tel" required>
+
+<label>موضوع درخواست</label>
+<select id="subject">
+<option>پیگیری سفارش</option>
+<option>مشاوره و استعلام قیمت</option>
+<option>خدمات پس از فروش</option>
+<option>شکایت و انتقاد</option>
+<option>سایر موارد</option>
+</select>
+
+<label>توضیحات</label>
+<textarea id="message" required></textarea>
+
+<button type="submit">ثبت درخواست</button>
+</form>
+
+<div id="result"></div>
+</section>
+
+<section class="card">
+<h2>پیگیری درخواست</h2>
+<input id="trackingId" placeholder="کد پیگیری را وارد کنید">
+<button id="trackButton">پیگیری</button>
+<div id="trackingResult"></div>
+</section>
+
+</main>
+
+<footer>
+گروه تولیدی رایا صنعت استیل | Raya Glass
+</footer>
+
+<script src="app.js"></script>
+<script>
+const form = document.getElementById("supportForm");
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const request = window.RayaSupport.createRequest({
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    subject: document.getElementById("subject").value,
+    message: document.getElementById("message").value
+  });
+
+  document.getElementById("result").innerHTML =
+    "درخواست شما ثبت شد. کد پیگیری: " + request.id;
+
+  form.reset();
+});
+
+document.getElementById("trackButton").addEventListener("click", function() {
+  const id = document.getElementById("trackingId").value.trim();
+  const request = window.RayaSupport.findRequest(id);
+
+  document.getElementById("trackingResult").textContent =
+    request
+      ? "وضعیت درخواست: " + request.status
+      : "درخواستی با این کد در این نشست پیدا نشد.";
+});
+</script>
